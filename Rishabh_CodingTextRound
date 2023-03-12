@@ -1,0 +1,392 @@
+Write HTML code to create a table that displays the values listed below in a tabular format with proper header and alignment, a border of 1 px clr black, and the fields as Roll No., Student Name, Subject Name, and values as
+
+Ram, Physics
+Shyam, Math
+Murli, Chemistry
+
+
+
+   <table style="border: 1px solid black; border-collapse: collapse;">
+  <thead>
+    <tr>
+      <th style="border: 1px solid black; padding: 5px;">Roll No.</th>
+      <th style="border: 1px solid black; padding: 5px;">Student Name</th>
+      <th style="border: 1px solid black; padding: 5px;">Subject Name</th>
+      <th style="border: 1px solid black; padding: 5px;">Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border: 1px solid black; padding: 5px;">1</td>
+      <td style="border: 1px solid black; padding: 5px;">ram</td>
+      <td style="border: 1px solid black; padding: 5px;">physics</td>
+      <td style="border: 1px solid black; padding: 5px;">90</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid black; padding: 5px;">2</td>
+      <td style="border: 1px solid black; padding: 5px;">shyam</td>
+      <td style="border: 1px solid black; padding: 5px;">chemistry</td>
+      <td style="border: 1px solid black; padding: 5px;">85</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid black; padding: 5px;">3</td>
+      <td style="border: 1px solid black; padding: 5px;">murli</td>
+      <td style="border: 1px solid black; padding: 5px;">math</td>
+      <td style="border: 1px solid black; padding: 5px;">95</td>
+    </tr>
+  </tbody>
+</table>
+----------------------------------------------------------------------------
+Q3) Write code to check whether the string is palindrome or not
+
+
+
+function isPalindrome(str) {
+  
+  str = str.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+  
+  
+  return str === str.split('').reverse().join('');
+}
+
+
+console.log(isPalindrome("A man, a plan, a canal, Panama!"));  
+console.log(isPalindrome("Racecar")); 
+console.log(isPalindrome("hello")); 
+
+
+-------------------------------------------------------------------
+
+Q4)Write an SQL query to fetch duplicate records having matching data in some fields of a table.
+
+SELECT name, email, phone, COUNT(*) as count
+FROM mytable
+GROUP BY name, email, phone
+HAVING COUNT(*) > 1;
+
+
+------------------------------------------------------------------
+Q5)From the following table, write a SQL query to find all reviewers whose ratings contain a NULL value. Return reviewer name.
+
+
+SELECT rev_name
+FROM reviewer
+JOIN rating ON reviewer.rev_id = rating.rev_id
+WHERE rev_stars IS NULL;
+
+-------------------------------------------------------------------
+Q6)write a query to explain self join?
+
+CREATE TABLE employees (
+  id INT,
+  name VARCHAR(50),
+  manager_id INT
+);
+
+INSERT INTO employees (id, name, manager_id) VALUES
+(1, 'Alice', 3),
+(2, 'Bob', 3),
+(3, 'Charles', NULL),
+(4, 'David', 2),
+(5, 'Elizabeth', 2);
+
+
+SELECT e.name, m.name AS manager_name
+FROM employees e
+LEFT JOIN employees m ON e.manager_id = m.id;
+-----------------------------------------------------------
+
+Q7)Write a code to check two accepted numbers are amicable or not.
+
+
+
+
+
+function areAmicable(num1, num2) {
+
+  let sum1 = 0;
+  for (let i = 1; i < num1; i++) {
+    if (num1 % i === 0) {
+      sum1 += i;
+    }
+  }
+  
+  
+  let sum2 = 0;
+  for (let j = 1; j < num2; j++) {
+    if (num2 % j === 0) {
+      sum2 += j;
+    }
+  }
+  
+ 
+  if (sum1 === num2 && sum2 === num1) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+
+console.log(areAmicable(220, 284)); 
+console.log(areAmicable(1184, 1210)); 
+console.log(areAmicable(220, 221));
+------------------------------------------------------
+Q8 )Consider the following database schema to write queries in SQL
+
+SQL> select *from sailors;
+
+SID | SNAME |RATING |AGE
+22 |DUSTIN |7 |45
+29 |BRUTUS |1 |33
+31 |LUBBER |8 |55.5
+32 |ANDY |8 |25.5
+58 |RUSTY |10 |35
+64 |HORTAIO |7 |35
+71 |ZORBA |10 |16
+74 |HORTAIO |9 |35
+85 |ART |3 |25.5
+95 |BOB |3 |63.5
+
+10 ROWS SELECETED.
+
+
+SQL> select *from reserves;
+
+SID | BID |DAY
+22 | 101 |10-OCT-98
+22 | 102 |10-OCT-98
+22 | 103 |8-OCT-98
+22 | 104 |7-OCT-98
+31 | 102 |10-NOV-98
+31 | 103 |06-NOV-98
+31 | 104 |12-NOV-98
+64 | 101 |05-SEP-98
+64 | 102 |08-SEP-98
+74 | 103 |08-SEP-98
+
+10 ROWS SELECETED.
+
+
+SQL> select *from reserves;
+
+
+BID | BNAME |COLOR
+101 | Interlake |blue
+102 | Interlake |red
+103 | clipper |green
+104 | Marine |red
+
+i) Find the sailors who have reserved a red boat
+ii) Find the names of the sailors who have reserved at least two boats
+iii) Find the colors of the boats reserved by ‘Mohan’.
+iv) Find the names of sailors who have reserved both a red and a green boat?
+v) Find the sids of sailors with age over 20 who have not reserved a red boat.
+
+
+
+
+1 answer)
+
+SELECT DISTINCT s.SNAME
+FROM sailors s
+JOIN reserves r ON s.SID = r.SID
+JOIN boats b ON r.BID = b.BID
+WHERE b.COLOR = 'red';
+
+2 answer)
+
+SELECT s.SNAME
+FROM sailors s
+JOIN (SELECT SID, COUNT(*) as count_reserves
+      FROM reserves
+      GROUP BY SID
+      HAVING COUNT(*) >= 2) r ON s.SID = r.SID;
+
+
+3 answer)
+
+   SELECT DISTINCT b.COLOR
+FROM sailors s
+JOIN reserves r ON s.SID = r.SID
+JOIN boats b ON r.BID = b.BID
+WHERE s.SNAME = 'Mohan';
+
+
+
+4 answer)
+   SELECT s.SNAME
+FROM sailors s
+JOIN reserves r1 ON s.SID = r1.SID
+JOIN boats b1 ON r1.BID = b1.BID
+JOIN reserves r2 ON s.SID = r2.SID
+JOIN boats b2 ON r2.BID = b2.BID
+WHERE b1.COLOR = 'red' AND b2.COLOR = 'green'
+GROUP BY s.SID
+HAVING COUNT(DISTINCT b1.COLOR, b2.COLOR) = 2;
+
+
+----------------------------------------------------------------------
+ Q10)  write a program to print all prime numbers till n numbers
+
+
+function printPrimes(n) {
+  
+  for (let num = 2; num <= n; num++) {
+   
+    let isPrime = true;
+    
+   
+    for (let i = 2; i < num; i++) {
+      if (num % i === 0) {
+        isPrime = false;
+        break; 
+      }
+    }
+    
+   
+    if (isPrime) {
+      console.log(num);
+    }
+  }
+}
+
+
+printPrimes(20); 
+
+  -----------------------------------------------------------
+ Q 11) Write a program to find second largest number in an array?
+
+  function findSecondLargest(arr) {
+  let largest = arr[0];
+  let secondLargest = arr[0];
+  
+  for (let i = 1; i < arr.length; i++) {
+    if (arr[i] > largest) {
+      secondLargest = largest;
+      largest = arr[i];
+    } else if (arr[i] > secondLargest && arr[i] !== largest) {
+      secondLargest = arr[i];
+    }
+  }
+  
+  return secondLargest;
+}
+
+
+const arr = [1, 5, 2, 9, 6];
+const secondLargest = findSecondLargest(arr);
+console.log(secondLargest); 
+
+----------------------------------------------------------------------------
+Q12) write a program to Print Pyramid Number Pattern of n lines
+
+1
+2 3 2
+3 4 5 4 3
+4 5 6 7 6 5 4
+5 6 7 8 9 8 7 6 5
+
+
+
+const n = 5; 
+
+
+for (let i = 1; i <= n; i++) {
+  let row = ''; 
+  
+
+  for (let j = i; j < i + i; j++) {
+    row += j + ' '; 
+  }
+  for (let k = i + i - 2; k >= i; k--) {
+    row += k + ' ';
+  }
+  
+  console.log(row); 
+}
+
+
+
+
+-------------------------------------------------------------------
+Q13 ) Wrie Html script to Apply animation on homepage using css?
+
+
+
+      <!DOCTYPE html>
+<html>
+<head>
+	<title>Homepage Animation</title>
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+			font-family: Arial, sans-serif;
+		}
+		.header {
+			background-color: #333;
+			color: #fff;
+			padding: 20px;
+			text-align: center;
+			animation-name: header-anim;
+			animation-duration: 1s;
+			animation-timing-function: ease-out;
+		}
+		@keyframes header-anim {
+			from {opacity: 0;}
+			to {opacity: 1;}
+		}
+		.main-content {
+			background-color: #f2f2f2;
+			padding: 50px;
+			text-align: center;
+			animation-name: content-anim;
+			animation-duration: 2s;
+			animation-timing-function: ease-in-out;
+		}
+		@keyframes content-anim {
+			0% {transform: scale(0.9);}
+			50% {transform: scale(1.1);}
+			100% {transform: scale(1);}
+		}
+	</style>
+</head>
+<body>
+	<header class="header">
+		<h1>Homepage Animation</h1>
+		<p>This is an example of how to apply animation using CSS</p>
+	</header>
+	<main class="main-content">
+		<h2>Welcome to our homepage</h2>
+		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ultricies feugiat velit, ac euismod nulla tincidunt eget. Morbi gravida nisl nec lorem vestibulum, eget rutrum sapien venenatis.</p>
+		<button>Learn More</button>
+	</main>
+</body>
+</html>
+
+
+----------------------------------------------------------------------------------------------
+Q 14)From the following table, write a SQL query to find customers whose grade is 200. Return customer_id, cust_name, city, grade, salesman_id.
+
+
+customer_id | cust_name | city | grade | salesman_id
+-------------+----------------+------------+-------+-------------
+3002 | Nick Rimando | New York | 100 | 5001
+3007 | Brad Davis | New York | 200 | 5001
+3005 | Graham Zusi | California | 200 | 5002
+3008 | Julian Green | London | 300 | 5002
+3004 | Fabian Johnson | Paris | 300 | 5006
+3009 | Geoff Cameron | Berlin | 100 | 5003
+3003 | Jozy Altidor | Moscow | 200 | 5007
+3001 | Brad Guzan | London | | 5005
+
+
+SELECT customer_id, cust_name, city, grade, salesman_id
+FROM table_name
+WHERE grade = 200;
+
+
+
+
+   
